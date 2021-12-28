@@ -215,28 +215,28 @@ export async function main(ns) {
     asynchronousHelpers = [
         { name: "stats.js", requiredServer: "home" }, // Adds stats not usually in the HUD
         { name: "stockmaster.js", requiredServer: "home", args: ["--show-market-summary"], tail: true, shouldRun: () => playerStats.hasTixApiAccess }, // Start our stockmaster if we have the required stockmarket access
-        { name: "spend-hacknet-hashes.js", requiredServer: "home", tail: true, args: ["-v"] }, // Always have this running to make sure hashes aren't wasted
+////        { name: "spend-hacknet-hashes.js", requiredServer: "home", tail: true, args: ["-v"] }, // Always have this running to make sure hashes aren't wasted
         { name: "hacknet-upgrade-manager.js", requiredServer: "home", tail: true, args: ["-c", "--max-payoff-time", "1h"] }, // Kickstart hash income by buying everything with up to 1h payoff time immediately
-        { name: "gangs.js", requiredServer: "home", tail: true }, // Script to create manage our gang for us
-        { name: "sleeve.js", requiredServer: "home", tail: true }, // Script to create manage our sleeves for us
-        { name: "work-for-factions.js", requiredServer: "home", args: ['--fast-crimes-only', '--no-coding-contracts'] }, // Script to manage how we use our "focus" work
+////        { name: "gangs.js", requiredServer: "home", tail: true }, // Script to create manage our gang for us
+////        { name: "sleeve.js", requiredServer: "home", tail: true }, // Script to create manage our sleeves for us
+////        { name: "work-for-factions.js", requiredServer: "home", args: ['--fast-crimes-only', '--no-coding-contracts'] }, // Script to manage how we use our "focus" work
     ];
     asynchronousHelpers.forEach(helper => helper.isLaunched = false);
     // These scripts are spawned periodically (at some interval) to do their checks, with an optional condition that limits when they should be spawned
     let shouldUpgradeHacknet = () => !shouldReserveMoney() && (whichServerIsRunning(ns, "hacknet-upgrade-manager.js", false) === null);
     periodicScripts = [
         // Buy tor as soon as we can if we haven't already, and all the port crackers
-        { interval: 29000, name: "/Tasks/tor-manager.js", shouldRun: () => !addedServerNames.includes("darkweb") },
-        { interval: 30000, name: "/Tasks/program-manager.js", shouldRun: () => getNumPortCrackers() != 5 },
-        { interval: 31000, name: "/Tasks/ram-manager.js", shouldRun: () => !shouldReserveMoney() && (getTotalNetworkUtilization() > 0.85 || xpOnly) },
+////        { interval: 29000, name: "/Tasks/tor-manager.js", shouldRun: () => !addedServerNames.includes("darkweb") },
+////        { interval: 30000, name: "/Tasks/program-manager.js", shouldRun: () => getNumPortCrackers() != 5 },
+////        { interval: 31000, name: "/Tasks/ram-manager.js", shouldRun: () => !shouldReserveMoney() && (getTotalNetworkUtilization() > 0.85 || xpOnly) },
         // Buy every hacknet upgrade with up to 4h payoff if it is less than 10% of our current money or 8h if it is less than 1% of our current money
         { interval: 32000, name: "hacknet-upgrade-manager.js", shouldRun: shouldUpgradeHacknet, args: () => ["-c", "--max-payoff-time", "4h", "--max-spend", ns.getServerMoneyAvailable("home") * 0.1] },
         { interval: 33000, name: "hacknet-upgrade-manager.js", shouldRun: shouldUpgradeHacknet, args: () => ["-c", "--max-payoff-time", "8h", "--max-spend", ns.getServerMoneyAvailable("home") * 0.01] },
         // Don't start auto-joining factions until we're holding 1 billion (so coding contracts returning money is probably less critical) or we've joined one already
-        { interval: 34000, name: "faction-manager.js", requiredServer: "home", args: ['--join-only'], shouldRun: () => playerStats.factions.length > 0 || ns.getServerMoneyAvailable("home") > 1e9 },
+////        { interval: 34000, name: "faction-manager.js", requiredServer: "home", args: ['--join-only'], shouldRun: () => playerStats.factions.length > 0 || ns.getServerMoneyAvailable("home") > 1e9 },
         { interval: 51000, name: "/Tasks/contractor.js", requiredServer: "home" },
-        { interval: 110000, name: "/Tasks/backdoor-all-servers.js", requiredServer: "home" },
-        { interval: 111000, name: "host-manager.js", requiredServer: "home", shouldRun: () => !shouldReserveMoney() },
+////        { interval: 110000, name: "/Tasks/backdoor-all-servers.js", requiredServer: "home" },
+////        { interval: 111000, name: "host-manager.js", requiredServer: "home", shouldRun: () => !shouldReserveMoney() },
     ];
     hackTools = [
         { name: "/Remote/weak-target.js", shortName: "weak" },
